@@ -16,13 +16,15 @@ class Task{
     public void unmark() {
         isDone = false;
     }
+
+
 }
 
 
 public class Grace {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        String[] tasks = new String[100];
+        Task[] tasks = new Task[100];
         int taskCount = 0;
 
         System.out.println("____________________________________________________________");
@@ -43,8 +45,28 @@ public class Grace {
                     System.out.println(" " + (i + 1) + ". " + tasks[i]);
                 }
                 System.out.println("____________________________________________________________");
-            } else {
-                tasks[taskCount] = input;
+            } else if (input.startsWith("mark ")){
+                int index = Integer.parseInt(input.split(" ")[1]) - 1;
+                if (index < taskCount && index >= 0){
+                    tasks[index].mark();
+                    System.out.println("____________________________________________________________");
+                    System.out.println(" Nice! I've marked this task as done:");
+                    System.out.println(" " + tasks[index]);
+                    System.out.println("____________________________________________________________");
+                }
+            } else if (input.startsWith("unmark ")){
+                int index = Integer.parseInt(input.split(" ")[1]) - 1;
+                if (index < taskCount && index >= 0){
+                    tasks[index].unmark();
+                    System.out.println("____________________________________________________________");
+                    System.out.println(" OK, I've marked this task as not done yet:");
+                    System.out.println(" " + tasks[index]);
+                    System.out.println("____________________________________________________________");
+                }
+            }
+
+            else {
+                tasks[taskCount] = new Task(input);
                 taskCount++;
 
                 System.out.println("____________________________________________________________");
