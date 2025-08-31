@@ -1,5 +1,23 @@
 import java.util.Scanner;
 
+class Task{
+    private String description;
+    private boolean isDone;
+
+    public Task(String description){
+        this.description = description;
+        this.isDone = false;
+    }
+
+    public void mark(){
+        isDone = true;
+    }
+
+    public void unmark() {
+        isDone = false;
+    }
+}
+
 
 public class Grace {
     public static void main(String[] args) {
