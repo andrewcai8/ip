@@ -17,9 +17,10 @@ class Task{
         isDone = false;
     }
 
-
+    public String toString(){
+        return "[" + (isDone ? "X" : " ") + "] " + description;
+    }
 }
-
 
 public class Grace {
     public static void main(String[] args) {
@@ -68,7 +69,6 @@ public class Grace {
             else {
                 tasks[taskCount] = new Task(input);
                 taskCount++;
-
                 System.out.println("____________________________________________________________");
                 System.out.println(" added: " + input);
                 System.out.println("____________________________________________________________");
