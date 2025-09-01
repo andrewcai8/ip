@@ -1,15 +1,15 @@
 import java.util.Scanner;
 
-class Task{
+class Task {
     private String description;
     private boolean isDone;
 
-    public Task(String description){
+    public Task(String description) {
         this.description = description;
         this.isDone = false;
     }
 
-    public void mark(){
+    public void mark() {
         isDone = true;
     }
 
@@ -17,7 +17,8 @@ class Task{
         isDone = false;
     }
 
-    public String toString(){
+    @Override
+    public String toString() {
         return "[" + (isDone ? "X" : " ") + "] " + description;
     }
 }
@@ -33,31 +34,31 @@ public class Grace {
         System.out.println("What can I do for you?");
         System.out.println("____________________________________________________________");
 
-        while (true){
+        while (true) {
             String input = sc.nextLine();
-            if (input.equals("bye")){
+            if (input.equals("bye")) {
                 System.out.println("____________________________________________________________");
                 System.out.println("Bye. Hope to see you again soon!");
                 System.out.println("____________________________________________________________");
                 break;
-            } else if (input.equals("list")){
+            } else if (input.equals("list")) {
                 System.out.println("____________________________________________________________");
-                for (int i = 0; i < taskCount; i++){
+                for (int i = 0; i < taskCount; i++) {
                     System.out.println(" " + (i + 1) + ". " + tasks[i]);
                 }
                 System.out.println("____________________________________________________________");
-            } else if (input.startsWith("mark ")){
+            } else if (input.startsWith("mark ")) {
                 int index = Integer.parseInt(input.split(" ")[1]) - 1;
-                if (index < taskCount && index >= 0){
+                if (index < taskCount && index >= 0) {
                     tasks[index].mark();
                     System.out.println("____________________________________________________________");
                     System.out.println(" Nice! I've marked this task as done:");
                     System.out.println(" " + tasks[index]);
                     System.out.println("____________________________________________________________");
                 }
-            } else if (input.startsWith("unmark ")){
+            } else if (input.startsWith("unmark ")) {
                 int index = Integer.parseInt(input.split(" ")[1]) - 1;
-                if (index < taskCount && index >= 0){
+                if (index < taskCount && index >= 0) {
                     tasks[index].unmark();
                     System.out.println("____________________________________________________________");
                     System.out.println(" OK, I've marked this task as not done yet:");
