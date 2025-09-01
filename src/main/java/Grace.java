@@ -64,9 +64,7 @@ public class Grace {
                     System.out.println(" " + tasks[index]);
                     System.out.println("____________________________________________________________");
                 }
-            }
-
-            else {
+            } else {
                 tasks[taskCount] = new Task(input);
                 taskCount++;
                 System.out.println("____________________________________________________________");
