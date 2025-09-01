@@ -1,28 +1,5 @@
 import java.util.Scanner;
 
-class Task {
-    private final String description;
-    private boolean isDone;
-
-    public Task(String description) {
-        this.description = description;
-        this.isDone = false;
-    }
-
-    public void mark() {
-        isDone = true;
-    }
-
-    public void unmark() {
-        isDone = false;
-    }
-
-    @Override
-    public String toString() {
-        return "[" + (isDone ? "X" : " ") + "] " + description;
-    }
-}
-
 public class Grace {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
