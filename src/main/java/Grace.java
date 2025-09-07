@@ -51,10 +51,7 @@ public class Grace {
         int index = parseIndex(input, taskCount);
         if (index < taskCount && index >= 0) {
             tasks[index].mark();
-            printLine();
-            printMessage(" Nice! I've marked this task as done:");
-            printMessage(" " + tasks[index]);
-            printLine();
+            printTaskUpdate("Nice! I've marked this task as done:", tasks[index]);
         }
     }
 
@@ -62,11 +59,15 @@ public class Grace {
         int index = parseIndex(input, taskCount);
         if (index < taskCount && index >= 0) {
             tasks[index].unmark();
-            printLine();
-            printMessage(" OK, I've marked this task as not done yet:");
-            printMessage(" " + tasks[index]);
-            printLine();
+            printTaskUpdate("OK, I've marked this task as not done yet:", tasks[index]);
         }
+    }
+
+    private static void printTaskUpdate(String message, Task task) {
+        printLine();
+        printMessage(message);
+        printMessage(" " + task);
+        printLine();
     }
 
 
