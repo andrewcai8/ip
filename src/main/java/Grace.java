@@ -40,6 +40,7 @@ public class Grace {
 
     private static void handleList(Task[] tasks, int taskCount) {
         printLine();
+        printMessage("Here are the tasks in your list:");
         for (int i = 0; i < taskCount; i++) {
             printMessage(" " + (i + 1) + ". " + tasks[i]);
         }
@@ -70,10 +71,29 @@ public class Grace {
 
 
     private static int handleAdd(Task[] tasks, int taskCount, String input) {
-        tasks[taskCount] = new Task(input);
+        Task task;
+
+        if (input.startsWith("todo ")){
+            String description = input.substring(5);
+            task = new Todo(description);
+
+        } else if (input.startsWith("deadline ")) {
+            String[] parts = input.substring(9).split("/by", 2);
+            task = new Deadline(parts[0].trim(), parts[1].trim());
+
+        } else if (input.startsWith("event ")){
+            String[] parts = input.substring(6).split("/from |/to ");
+            task = new Event(parts[0].trim(), parts[1].trim(), parts[2]);
+        } else {
+            task = new Task(input);
+        }
+
+        tasks[taskCount] = task;
         taskCount++;
         printLine();
-        printMessage(" added: " + input);
+        printMessage("Got it. I've added this task:");
+        printMessage(" " + task);
+        printMessage("Now you have " + taskCount + " tasks in the list.");
         printLine();
         return taskCount;
     }
