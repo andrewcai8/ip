@@ -9,51 +9,95 @@ public class Grace {
         Task[] tasks = new Task[TASK_MAX];
         int taskCount = 0;
 
-
-        System.out.println(PARTITION);
-        System.out.println("Hello! I'm Grace!!");
-        System.out.println("What can I do for you?");
-        System.out.println(PARTITION);
+        greet();
 
         while (true) {
+
             String input = sc.nextLine();
+
             if (input.equals("bye")) {
-                System.out.println(PARTITION);
-                System.out.println("Bye. Hope to see you again soon!");
-                System.out.println(PARTITION);
+                bye();
                 break;
             } else if (input.equals("list")) {
-                System.out.println(PARTITION);
-                for (int i = 0; i < taskCount; i++) {
-                    System.out.println(" " + (i + 1) + ". " + tasks[i]);
-                }
-                System.out.println(PARTITION);
+                handleList(tasks, taskCount);
             } else if (input.startsWith("mark ")) {
-                int index = Integer.parseInt(input.split(" ")[1]) - 1;
-                if (index < taskCount && index >= 0) {
-                    tasks[index].mark();
-                    System.out.println(PARTITION);
-                    System.out.println(" Nice! I've marked this task as done:");
-                    System.out.println(" " + tasks[index]);
-                    System.out.println(PARTITION);
-                }
+                handleMark(tasks, taskCount, input);
             } else if (input.startsWith("unmark ")) {
-                int index = Integer.parseInt(input.split(" ")[1]) - 1;
-                if (index < taskCount && index >= 0) {
-                    tasks[index].unmark();
-                    System.out.println(PARTITION);
-                    System.out.println(" OK, I've marked this task as not done yet:");
-                    System.out.println(" " + tasks[index]);
-                    System.out.println(PARTITION);
-                }
+                handleUnmark(tasks, taskCount, input);
             } else {
-                tasks[taskCount] = new Task(input);
-                taskCount++;
-                System.out.println(PARTITION);
-                System.out.println(" added: " + input);
-                System.out.println(PARTITION);
+                taskCount = handleAdd(tasks, taskCount, input);
             }
         }
         sc.close();
+    }
+
+    private static void greet() {
+        printLine();
+        printMessage("Hello! I'm Grace!!");
+        printMessage("What can I do for you?");
+        printLine();
+    }
+
+    private static void handleList(Task[] tasks, int taskCount) {
+        printLine();
+        for (int i = 0; i < taskCount; i++) {
+            printMessage(" " + (i + 1) + ". " + tasks[i]);
+        }
+        printLine();
+    }
+
+    private static void handleMark(Task[] tasks, int taskCount, String input) {
+        int index = parseIndex(input, taskCount);
+        if (index < taskCount && index >= 0) {
+            tasks[index].mark();
+            printLine();
+            printMessage(" Nice! I've marked this task as done:");
+            printMessage(" " + tasks[index]);
+            printLine();
+        }
+    }
+
+    private static void handleUnmark(Task[] tasks, int taskCount, String input) {
+        int index = parseIndex(input, taskCount);
+        if (index < taskCount && index >= 0) {
+            tasks[index].unmark();
+            printLine();
+            printMessage(" OK, I've marked this task as not done yet:");
+            printMessage(" " + tasks[index]);
+            printLine();
+        }
+    }
+
+
+    private static int handleAdd(Task[] tasks, int taskCount, String input) {
+        tasks[taskCount] = new Task(input);
+        taskCount++;
+        printLine();
+        printMessage(" added: " + input);
+        printLine();
+        return taskCount;
+    }
+
+
+    private static void bye() {
+        printLine();
+        printMessage("Bye. Hope to see you again soon!");
+        printLine();
+    }
+
+    private static int parseIndex(String input, int taskCount) {
+        int index = Integer.parseInt(input.split(" ")[1]) - 1;
+        if (index >= 0 && index < taskCount) {
+            return index;
+        }
+        return -1;
+    }
+
+    private static void printLine() {
+        System.out.println(PARTITION);
+    }
+
+    private static void printMessage(String msg) {
+        System.out.println(" " + msg);
     }
 }
