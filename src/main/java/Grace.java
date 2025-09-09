@@ -15,17 +15,24 @@ public class Grace {
 
             String input = sc.nextLine();
 
-            if (input.equals("bye")) {
-                bye();
-                break;
-            } else if (input.equals("list")) {
-                handleList(tasks, taskCount);
-            } else if (input.startsWith("mark ")) {
-                handleMark(tasks, taskCount, input);
-            } else if (input.startsWith("unmark ")) {
-                handleUnmark(tasks, taskCount, input);
-            } else {
-                taskCount = handleAdd(tasks, taskCount, input);
+            try {
+
+                if (input.equals("bye")) {
+                    bye();
+                    break;
+                } else if (input.equals("list")) {
+                    handleList(tasks, taskCount);
+                } else if (input.startsWith("mark ")) {
+                    handleMark(tasks, taskCount, input);
+                } else if (input.startsWith("unmark ")) {
+                    handleUnmark(tasks, taskCount, input);
+                } else if (input.startsWith("todo") || input.startsWith("deadline") || input.startsWith("event")) {
+                    taskCount = handleAdd(tasks, taskCount, input);
+                } else {
+                    throw new GraceException("Hmm! I don't understand that command!");
+                }
+            } catch (GraceException e) {
+                showError(e.getMessage());
             }
         }
         sc.close();
@@ -107,9 +114,13 @@ public class Grace {
     }
 
     private static int parseIndex(String input, int taskCount) {
-        int index = Integer.parseInt(input.split(" ")[1]) - 1;
-        if (index >= 0 && index < taskCount) {
-            return index;
+        try {
+            int index = Integer.parseInt(input.split(" ")[1]) - 1;
+            if (index >= 0 && index < taskCount) {
+                return index;
+            }
+        } catch (Exception e) {
+            return -1;
         }
         return -1;
     }
@@ -120,5 +131,11 @@ public class Grace {
 
     private static void printMessage(String msg) {
         System.out.println(" " + msg);
+    }
+
+    private static void showError(String errorMsg) {
+        printLine();
+        printMessage(errorMsg);
+        printLine();
     }
 }
