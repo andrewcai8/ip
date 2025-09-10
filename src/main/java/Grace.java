@@ -58,20 +58,23 @@ public class Grace {
         printLine();
     }
 
-    private static void handleMark(Task[] tasks, int taskCount, String input) {
+    private static void handleMark(Task[] tasks, int taskCount, String input) throws GraceException {
         int index = parseIndex(input, taskCount);
-        if (index < taskCount && index >= 0) {
-            tasks[index].mark();
-            printTaskUpdate("Nice! I've marked this task as done:", tasks[index]);
+        if (index == -1) {
+            throw new GraceException("That's not a valid task number to mark");
         }
+        tasks[index].mark();
+        printTaskUpdate("Nice! I've marked this task as done:", tasks[index]);
     }
 
-    private static void handleUnmark(Task[] tasks, int taskCount, String input) {
+    private static void handleUnmark(Task[] tasks, int taskCount, String input) throws GraceException {
         int index = parseIndex(input, taskCount);
-        if (index < taskCount && index >= 0) {
-            tasks[index].unmark();
-            printTaskUpdate("OK, I've marked this task as not done yet:", tasks[index]);
+        if (index == -1) {
+            throw new GraceException("That's not a valid task number to unmark");
         }
+        tasks[index].unmark();
+        printTaskUpdate("OK, I've marked this task as not done yet:", tasks[index]);
+
     }
 
     private static void printTaskUpdate(String message, Task task) {
