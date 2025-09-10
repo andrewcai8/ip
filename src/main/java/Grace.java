@@ -85,11 +85,14 @@ public class Grace {
     }
 
 
-    private static int handleAdd(Task[] tasks, int taskCount, String input) {
-        Task task;
+    private static int handleAdd(Task[] tasks, int taskCount, String input) throws GraceException{
+        Task task = null;
 
-        if (input.startsWith("todo ")) {
-            String description = input.substring(5);
+        if (input.startsWith("todo")) {
+            String description = input.substring(4).trim();
+            if (description.isEmpty()) {
+                throw new GraceException("You can’t add a todo without a description.");
+            }
             task = new Todo(description);
 
         } else if (input.startsWith("deadline ")) {
