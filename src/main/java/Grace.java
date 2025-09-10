@@ -47,9 +47,13 @@ public class Grace {
 
     private static void handleList(Task[] tasks, int taskCount) {
         printLine();
-        printMessage("Here are the tasks in your list:");
-        for (int i = 0; i < taskCount; i++) {
-            printMessage(" " + (i + 1) + ". " + tasks[i]);
+        if (taskCount == 0) {
+            printMessage("Your task list is empty.");
+        } else {
+            printMessage("Here are the tasks in your list:");
+            for (int i = 0; i < taskCount; i++) {
+                printMessage(" " + (i + 1) + ". " + tasks[i]);
+            }
         }
         printLine();
     }
