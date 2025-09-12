@@ -94,16 +94,18 @@ public class Grace {
                 throw new GraceException("You can’t add a todo without a description.");
             }
             task = new Todo(description);
-
-        } else if (input.startsWith("deadline ")) {
-            String[] parts = input.substring(9).split("/by", 2);
+        } else if (input.startsWith("deadline")) {
+            String[] parts = input.substring(8).split("/by", 2);
+            if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
+                throw new GraceException("A deadline need both a description and a /by time.");
+            }
             task = new Deadline(parts[0].trim(), parts[1].trim());
-
-        } else if (input.startsWith("event ")) {
-            String[] parts = input.substring(6).split("/from |/to ");
+        } else if (input.startsWith("event")) {
+            String[] parts = input.substring(5).split("/from |/to ");
+            if (parts.length < 3 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
+                throw new GraceException("An event needs a description, /from time, and a /to time.");
+            }
             task = new Event(parts[0].trim(), parts[1].trim(), parts[2]);
-        } else {
-            task = new Task(input);
         }
 
         tasks[taskCount] = task;
