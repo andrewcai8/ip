@@ -1,3 +1,5 @@
+package grace;
+
 import java.util.Scanner;
 
 public class Grace {
@@ -40,7 +42,7 @@ public class Grace {
 
     private static void greet() {
         printLine();
-        printMessage("Hello! I'm Grace!!");
+        printMessage("Hello! I'm grace.Grace!!");
         printMessage("What can I do for you?");
         printLine();
     }
