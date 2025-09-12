@@ -15,17 +15,24 @@ public class Grace {
 
             String input = sc.nextLine();
 
-            if (input.equals("bye")) {
-                bye();
-                break;
-            } else if (input.equals("list")) {
-                handleList(tasks, taskCount);
-            } else if (input.startsWith("mark ")) {
-                handleMark(tasks, taskCount, input);
-            } else if (input.startsWith("unmark ")) {
-                handleUnmark(tasks, taskCount, input);
-            } else {
-                taskCount = handleAdd(tasks, taskCount, input);
+            try {
+
+                if (input.equals("bye")) {
+                    bye();
+                    break;
+                } else if (input.equals("list")) {
+                    handleList(tasks, taskCount);
+                } else if (input.startsWith("mark ")) {
+                    handleMark(tasks, taskCount, input);
+                } else if (input.startsWith("unmark ")) {
+                    handleUnmark(tasks, taskCount, input);
+                } else if (input.startsWith("todo") || input.startsWith("deadline") || input.startsWith("event")) {
+                    taskCount = handleAdd(tasks, taskCount, input);
+                } else {
+                    throw new GraceException("Hmm! I don't understand that command!");
+                }
+            } catch (GraceException e) {
+                showError(e.getMessage());
             }
         }
         sc.close();
@@ -40,27 +47,34 @@ public class Grace {
 
     private static void handleList(Task[] tasks, int taskCount) {
         printLine();
-        printMessage("Here are the tasks in your list:");
-        for (int i = 0; i < taskCount; i++) {
-            printMessage(" " + (i + 1) + ". " + tasks[i]);
+        if (taskCount == 0) {
+            printMessage("Your task list is empty.");
+        } else {
+            printMessage("Here are the tasks in your list:");
+            for (int i = 0; i < taskCount; i++) {
+                printMessage(" " + (i + 1) + ". " + tasks[i]);
+            }
         }
         printLine();
     }
 
-    private static void handleMark(Task[] tasks, int taskCount, String input) {
+    private static void handleMark(Task[] tasks, int taskCount, String input) throws GraceException {
         int index = parseIndex(input, taskCount);
-        if (index < taskCount && index >= 0) {
-            tasks[index].mark();
-            printTaskUpdate("Nice! I've marked this task as done:", tasks[index]);
+        if (index == -1) {
+            throw new GraceException("That's not a valid task number to mark");
         }
+        tasks[index].mark();
+        printTaskUpdate("Nice! I've marked this task as done:", tasks[index]);
     }
 
-    private static void handleUnmark(Task[] tasks, int taskCount, String input) {
+    private static void handleUnmark(Task[] tasks, int taskCount, String input) throws GraceException {
         int index = parseIndex(input, taskCount);
-        if (index < taskCount && index >= 0) {
-            tasks[index].unmark();
-            printTaskUpdate("OK, I've marked this task as not done yet:", tasks[index]);
+        if (index == -1) {
+            throw new GraceException("That's not a valid task number to unmark");
         }
+        tasks[index].unmark();
+        printTaskUpdate("OK, I've marked this task as not done yet:", tasks[index]);
+
     }
 
     private static void printTaskUpdate(String message, Task task) {
@@ -71,22 +85,27 @@ public class Grace {
     }
 
 
-    private static int handleAdd(Task[] tasks, int taskCount, String input) {
-        Task task;
+    private static int handleAdd(Task[] tasks, int taskCount, String input) throws GraceException{
+        Task task = null;
 
-        if (input.startsWith("todo ")) {
-            String description = input.substring(5);
+        if (input.startsWith("todo")) {
+            String description = input.substring(4).trim();
+            if (description.isEmpty()) {
+                throw new GraceException("You can’t add a todo without a description.");
+            }
             task = new Todo(description);
-
-        } else if (input.startsWith("deadline ")) {
-            String[] parts = input.substring(9).split("/by", 2);
+        } else if (input.startsWith("deadline")) {
+            String[] parts = input.substring(8).split("/by", 2);
+            if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
+                throw new GraceException("A deadline need both a description and a /by time.");
+            }
             task = new Deadline(parts[0].trim(), parts[1].trim());
-
-        } else if (input.startsWith("event ")) {
-            String[] parts = input.substring(6).split("/from |/to ");
+        } else if (input.startsWith("event")) {
+            String[] parts = input.substring(5).split("/from |/to ");
+            if (parts.length < 3 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
+                throw new GraceException("An event needs a description, /from time, and a /to time.");
+            }
             task = new Event(parts[0].trim(), parts[1].trim(), parts[2]);
-        } else {
-            task = new Task(input);
         }
 
         tasks[taskCount] = task;
@@ -107,9 +126,13 @@ public class Grace {
     }
 
     private static int parseIndex(String input, int taskCount) {
-        int index = Integer.parseInt(input.split(" ")[1]) - 1;
-        if (index >= 0 && index < taskCount) {
-            return index;
+        try {
+            int index = Integer.parseInt(input.split(" ")[1]) - 1;
+            if (index >= 0 && index < taskCount) {
+                return index;
+            }
+        } catch (Exception e) {
+            return -1;
         }
         return -1;
     }
@@ -120,5 +143,11 @@ public class Grace {
 
     private static void printMessage(String msg) {
         System.out.println(" " + msg);
+    }
+
+    private static void showError(String errorMsg) {
+        printLine();
+        printMessage(errorMsg);
+        printLine();
     }
 }
