@@ -1,14 +1,19 @@
 package grace;
 
 import java.util.Scanner;
+import java.util.ArrayList;
+
 
 public class Grace {
     private final static String PARTITION = "____________________________________________________________";
+    private static final String FILE_PATH = "./data/grace.text";
     private final static int TASK_MAX = 100;
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Task[] tasks = new Task[TASK_MAX];
+        Storage storage = new Storage(FILE_PATH);
+
+        ArrayList<Task> tasks = storage.load();
         int taskCount = 0;
 
         greet();
@@ -26,10 +31,13 @@ public class Grace {
                     handleList(tasks, taskCount);
                 } else if (input.startsWith("mark ")) {
                     handleMark(tasks, taskCount, input);
+                    storage.save(tasks);
                 } else if (input.startsWith("unmark ")) {
+                    storage.save(tasks);
                     handleUnmark(tasks, taskCount, input);
                 } else if (input.startsWith("todo") || input.startsWith("deadline") || input.startsWith("event")) {
                     taskCount = handleAdd(tasks, taskCount, input);
+                    storage.save(tasks);
                 } else {
                     throw new GraceException("Hmm! I don't understand that command!");
                 }
