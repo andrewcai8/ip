@@ -5,14 +5,14 @@ import java.util.Scanner;
 
 public class Grace {
     private final static String PARTITION = "____________________________________________________________";
-    private static final String FILE_PATH = "./data/grace.text";
+    private static final String FILE_PATH = "./data/grace.txt";
     private static ArrayList<Task> tasks;
 
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         Storage storage = new Storage(FILE_PATH);
-        ArrayList<Task> tasks = storage.load();
+        tasks = storage.load();
 
         greet();
 
