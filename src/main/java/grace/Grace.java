@@ -5,11 +5,14 @@ import java.util.Scanner;
 
 public class Grace {
     private final static String PARTITION = "____________________________________________________________";
-    private static ArrayList<Task> tasks = new ArrayList<>();
-    
-    
+    private static final String FILE_PATH = "./data/grace.text";
+    private static ArrayList<Task> tasks;
+
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        Storage storage = new Storage(FILE_PATH);
+        ArrayList<Task> tasks = storage.load();
 
         greet();
 
@@ -26,12 +29,16 @@ public class Grace {
                     handleList();
                 } else if (input.startsWith("mark ")) {
                     handleMark(input);
+                    storage.save(tasks);
                 } else if (input.startsWith("unmark ")) {
                     handleUnmark(input);
+                    storage.save(tasks);
                 } else if (input.startsWith("delete ")) {
                     handleDelete(input);
+                    storage.save(tasks);
                 } else if (input.startsWith("todo") || input.startsWith("deadline") || input.startsWith("event")) {
                     handleAdd(input);
+                    storage.save(tasks);
                 } else {
                     throw new GraceException("Hmm! I don't understand that command!");
                 }
