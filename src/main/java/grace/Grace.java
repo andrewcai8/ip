@@ -1,15 +1,15 @@
 package grace;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Grace {
     private final static String PARTITION = "____________________________________________________________";
-    private final static int TASK_MAX = 100;
-
+    private static ArrayList<Task> tasks = new ArrayList<>();
+    
+    
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Task[] tasks = new Task[TASK_MAX];
-        int taskCount = 0;
 
         greet();
 
@@ -23,13 +23,15 @@ public class Grace {
                     bye();
                     break;
                 } else if (input.equals("list")) {
-                    handleList(tasks, taskCount);
+                    handleList();
                 } else if (input.startsWith("mark ")) {
-                    handleMark(tasks, taskCount, input);
+                    handleMark(input);
                 } else if (input.startsWith("unmark ")) {
-                    handleUnmark(tasks, taskCount, input);
+                    handleUnmark(input);
+                } else if (input.startsWith("delete ")) {
+                    handleDelete(input);
                 } else if (input.startsWith("todo") || input.startsWith("deadline") || input.startsWith("event")) {
-                    taskCount = handleAdd(tasks, taskCount, input);
+                    handleAdd(input);
                 } else {
                     throw new GraceException("Hmm! I don't understand that command!");
                 }
@@ -47,36 +49,48 @@ public class Grace {
         printLine();
     }
 
-    private static void handleList(Task[] tasks, int taskCount) {
+    private static void handleList() {
         printLine();
-        if (taskCount == 0) {
+        if (tasks.isEmpty()) {
             printMessage("Your task list is empty.");
         } else {
             printMessage("Here are the tasks in your list:");
-            for (int i = 0; i < taskCount; i++) {
-                printMessage(" " + (i + 1) + ". " + tasks[i]);
+            for (int i = 0; i < tasks.size(); i++) {
+                printMessage(" " + (i + 1) + ". " + tasks.get(i));
             }
         }
         printLine();
     }
 
-    private static void handleMark(Task[] tasks, int taskCount, String input) throws GraceException {
-        int index = parseIndex(input, taskCount);
+    private static void handleMark(String input) throws GraceException {
+        int index = parseIndex(input, tasks.size());
         if (index == -1) {
             throw new GraceException("That's not a valid task number to mark");
         }
-        tasks[index].mark();
-        printTaskUpdate("Nice! I've marked this task as done:", tasks[index]);
+        tasks.get(index).mark();
+        printTaskUpdate("Nice! I've marked this task as done:", tasks.get(index));
     }
 
-    private static void handleUnmark(Task[] tasks, int taskCount, String input) throws GraceException {
-        int index = parseIndex(input, taskCount);
+    private static void handleUnmark(String input) throws GraceException {
+        int index = parseIndex(input, tasks.size());
         if (index == -1) {
             throw new GraceException("That's not a valid task number to unmark");
         }
-        tasks[index].unmark();
-        printTaskUpdate("OK, I've marked this task as not done yet:", tasks[index]);
+        tasks.get(index).unmark();
+        printTaskUpdate("OK, I've marked this task as not done yet:", tasks.get(index));
+    }
 
+    private static void handleDelete(String input) throws GraceException {
+        int index = parseIndex(input, tasks.size());
+        if (index == -1) {
+            throw new GraceException("That's not a valid task number to delete");
+        }
+        Task removed = tasks.remove(index);
+        printLine();
+        printMessage("Noted. I've removed this task:");
+        printMessage(" " + removed);
+        printMessage("Now you have " + tasks.size() + " tasks in the list.");
+        printLine();
     }
 
     private static void printTaskUpdate(String message, Task task) {
@@ -87,7 +101,7 @@ public class Grace {
     }
 
 
-    private static int handleAdd(Task[] tasks, int taskCount, String input) throws GraceException{
+    private static void handleAdd(String input) throws GraceException{
         Task task = null;
 
         if (input.startsWith("todo")) {
@@ -110,14 +124,12 @@ public class Grace {
             task = new Event(parts[0].trim(), parts[1].trim(), parts[2]);
         }
 
-        tasks[taskCount] = task;
-        taskCount++;
+        tasks.add(task);
         printLine();
         printMessage("Got it. I've added this task:");
         printMessage(" " + task);
-        printMessage("Now you have " + taskCount + " tasks in the list.");
+        printMessage("Now you have " + tasks.size() + " tasks in the list.");
         printLine();
-        return taskCount;
     }
 
 
