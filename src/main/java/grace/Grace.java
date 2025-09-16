@@ -28,6 +28,8 @@ public class Grace {
                     handleMark(input);
                 } else if (input.startsWith("unmark ")) {
                     handleUnmark(input);
+                } else if (input.startsWith("delete ")) {
+                    handleDelete(input);
                 } else if (input.startsWith("todo") || input.startsWith("deadline") || input.startsWith("event")) {
                     handleAdd(input);
                 } else {
@@ -76,7 +78,19 @@ public class Grace {
         }
         tasks.get(index).unmark();
         printTaskUpdate("OK, I've marked this task as not done yet:", tasks.get(index));
+    }
 
+    private static void handleDelete(String input) throws GraceException {
+        int index = parseIndex(input, tasks.size());
+        if (index == -1) {
+            throw new GraceException("That's not a valid task number to delete");
+        }
+        Task removed = tasks.remove(index);
+        printLine();
+        printMessage("Noted. I've removed this task:");
+        printMessage(" " + removed);
+        printMessage("Now you have " + tasks.size() + " tasks in the list.");
+        printLine();
     }
 
     private static void printTaskUpdate(String message, Task task) {
