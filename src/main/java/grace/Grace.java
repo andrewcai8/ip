@@ -1,8 +1,5 @@
 package grace;
 
-import java.util.ArrayList;
-import java.util.Scanner;
-
 public class Grace {
     private static final String FILE_PATH = "./data/grace.txt";
 
