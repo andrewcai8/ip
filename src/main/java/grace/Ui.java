@@ -19,9 +19,7 @@ public class Ui {
     }
 
     public void showError(String errorMessage) {
-        showLine();
         showMessage(errorMessage);
-        showLine();
     }
 
     public void showWelcome() {
@@ -32,9 +30,7 @@ public class Ui {
     }
 
     public void showGoodbye() {
-        showLine();
         showMessage("Bye. Hope to see you again soon.");
-        showLine();
     }
 
     public String readCommand() {
