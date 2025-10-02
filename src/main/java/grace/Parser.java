@@ -8,7 +8,7 @@ package grace;
 public class Parser {
 
     /**
-     * Parses a user input string into a Command
+     * Parses user input string in a corresponding Command object.
      *
      * @param input the full line of the user input
      * @return the corresponding Command object
