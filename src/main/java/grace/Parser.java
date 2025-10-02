@@ -33,7 +33,15 @@ public class Parser {
                 throw new GraceException("An event needs a description, /from time, and a /to time.");
             }
             return new AddCommand(new Event(parts[0].trim(), parts[1].trim(), parts[2].trim()));
-        } else {
+        } else if (input.startsWith("find")) {
+            String[] parts = input.trim().split(" ", 2);
+            if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                throw new GraceException("The find command requires a keyword.");
+            }
+            return new FindCommand(parts[1].trim());
+        }
+
+        else {
             throw new GraceException("Hmm, I don't quite understand that command!");
         }
     }

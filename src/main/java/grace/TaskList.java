@@ -1,6 +1,7 @@
 package grace;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TaskList {
     private final ArrayList<Task> tasks;
@@ -33,6 +34,14 @@ public class TaskList {
         return tasks;
     }
 
+    public List<Task> findTasks(String keyword) {
+        List<Task> result = new ArrayList<>();
 
-
+        for (Task task : tasks) {
+            if (task.getDescription().contains(keyword)) {
+                result.add(task);
+            }
+        }
+        return result;
+    }
 }
