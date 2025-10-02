@@ -51,11 +51,12 @@ public class Parser {
             }
             return new AddCommand(new Event(eventParts[0].trim(), eventParts[1].trim(), eventParts[2].trim()));
         }
-        case "find":
+        case "find": {
             if (parts.length < 2 || parts[1].trim().isEmpty()) {
                 throw new GraceException("The find command requires a keyword.");
             }
             return new FindCommand(parts[1].trim());
+        }
         default:
             throw new GraceException("Hmm, I don't quite understand that command!");
         }
