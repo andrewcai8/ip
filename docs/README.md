@@ -6,7 +6,7 @@ Grace is a simple task management chatbot that helps you keep track of your todo
 You can interact with it using text commands, and it will save your tasks to your computer so that they are available the next time you use your program.
 
 ## Getting Started
-1. Download the `grace.jar` file and place it in an empty folder.
+1. Download the `ip.jar` file and place it in an empty folder.
 2. Open a terminal/command prompt in that folder.
 3. Run the application with: java -jar grace.jar
 4. Grace will greet you and wait for your commands.
