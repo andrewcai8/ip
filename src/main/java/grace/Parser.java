@@ -2,46 +2,48 @@ package grace;
 
 public class Parser {
     public static Command parse(String input) throws GraceException {
-        if (input.equals("bye")) {
+        String[] parts = input.trim().split(" ", 2);
+        String commandWord = parts[0];
+
+        switch (commandWord) {
+        case "bye":
             return new ExitCommand();
-        } else if (input.equals("list")) {
+        case "list":
             return new ListCommand();
-        } else if (input.startsWith("mark ")) {
-            int index = parseIndex(input);
-            return new MarkCommand(index);
-        } else if (input.startsWith("unmark ")) {
-            int index = parseIndex(input);
-            return new UnmarkCommand(index);
-        } else if (input.startsWith("delete ")) {
-            int index = parseIndex(input);
-            return new DeleteCommand(index);
-        } else if (input.startsWith("todo")) {
-            String description = input.substring(4).trim();
-            if (description.isEmpty()) {
+        case "mark":
+            int markIndex = parseIndex(input);
+            return new MarkCommand(markIndex);
+        case "unmark":
+            int unmarkIndex = parseIndex(input);
+            return new UnmarkCommand(unmarkIndex);
+        case "delete":
+            int deleteIndex = parseIndex(input);
+            return new DeleteCommand(deleteIndex);
+        case "todo":
+            if (parts.length < 2 || parts[1].isEmpty()) {
                 throw new GraceException("You can’t add a todo without a description.");
             }
-            return new AddCommand(new Todo(description));
-        } else if (input.startsWith("deadline")) {
-            String[] parts = input.substring(8).split("/by", 2);
-            if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
+            return new AddCommand(new Todo(parts[1]));
+        case "deadline": {
+            String[] deadlineParts = input.substring(8).split("/by", 2);
+            if (deadlineParts.length < 2 || deadlineParts[0].trim().isEmpty() || deadlineParts[1].trim().isEmpty()) {
                 throw new GraceException("A deadline needs both a description and a /by time.");
             }
-            return new AddCommand(new Deadline(parts[0].trim(), parts[1].trim()));
-        } else if (input.startsWith("event")) {
-            String[] parts = input.substring(5).split("/from |/to ");
-            if (parts.length < 3) {
+            return new AddCommand(new Deadline(deadlineParts[0].trim(), deadlineParts[1].trim()));
+        }
+        case "event": {
+            String[] eventParts = input.substring(5).split("/from |/to ");
+            if (eventParts.length < 3) {
                 throw new GraceException("An event needs a description, /from time, and a /to time.");
             }
-            return new AddCommand(new Event(parts[0].trim(), parts[1].trim(), parts[2].trim()));
-        } else if (input.startsWith("find")) {
-            String[] parts = input.trim().split(" ", 2);
+            return new AddCommand(new Event(eventParts[0].trim(), eventParts[1].trim(), eventParts[2].trim()));
+        }
+        case "find":
             if (parts.length < 2 || parts[1].trim().isEmpty()) {
                 throw new GraceException("The find command requires a keyword.");
             }
             return new FindCommand(parts[1].trim());
-        }
-
-        else {
+        default:
             throw new GraceException("Hmm, I don't quite understand that command!");
         }
     }
