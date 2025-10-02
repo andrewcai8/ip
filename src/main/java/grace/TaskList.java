@@ -3,9 +3,17 @@ package grace;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a list of tasks and provides methods to manipulate and query them.
+ */
 public class TaskList {
     private final ArrayList<Task> tasks;
 
+    /**
+     * Creates a TaskList initialized with the given tasks.
+     *
+     * @param tasks the initial list of tasks.
+     */
     public TaskList(ArrayList<Task> tasks) {
         this.tasks = tasks;
     }
@@ -34,6 +42,12 @@ public class TaskList {
         return tasks;
     }
 
+    /**
+     * Finds and returns all tasks whose descriptions contain the given keyword.
+     *
+     * @param keyword the keyword to search for
+     * @return a list of tasks that contain the keyword.
+     */
     public List<Task> findTasks(String keyword) {
         List<Task> result = new ArrayList<>();
 
