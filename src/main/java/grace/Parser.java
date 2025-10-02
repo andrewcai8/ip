@@ -1,6 +1,19 @@
 package grace;
 
+/**
+ * Parse raw user input into corresponding Command objects
+ * Interprets the command word and its arguments, and
+ * creating the appropriate command instance
+ */
 public class Parser {
+
+    /**
+     * Parses a user input string into a Command
+     *
+     * @param input the full line of the user input
+     * @return the corresponding Command object
+     * @throws GraceException if input is invalid or incomplete
+     */
     public static Command parse(String input) throws GraceException {
         String[] parts = input.trim().split(" ", 2);
         String commandWord = parts[0];

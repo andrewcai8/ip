@@ -3,9 +3,19 @@ package grace;
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * Handles loading and saving tasks to a file on disk
+ * Provides methods that persists the task list
+ */
 public class Storage {
     private final File file;
 
+    /**
+     * Creates a Storage object with the given filePath
+     * Ensures the file exists
+     *
+     * @param filePath the path of the file used for storage
+     */
     public Storage(String filePath) {
         this.file = new File(filePath);
         ensureFileExists();
@@ -25,6 +35,12 @@ public class Storage {
         }
     }
 
+    /**
+     * Loads tasks from the storage file.
+     * Corrupted lines are skipped.
+     *
+     * @return an ArrayList of tasks loaded from the file.
+     */
     public ArrayList<Task> load() {
         ArrayList<Task> tasks = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -70,6 +86,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Saves the given list of tasks to the storage file.
+     *
+     * @param tasks the list of tasks to save.
+     */
     public void save(ArrayList<Task> tasks) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
             for (Task task : tasks) {
@@ -83,8 +104,8 @@ public class Storage {
 
     private String formatTask(Task task) {
         String type = task instanceof Todo ? "T" :
-                      task instanceof Deadline ? "D" :
-                      task instanceof Event ? "E" : "?";
+                task instanceof Deadline ? "D" :
+                        task instanceof Event ? "E" : "?";
         String done = task.isDone() ? "1" : "0";
 
         if (task instanceof Todo) {

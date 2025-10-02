@@ -2,10 +2,17 @@ package grace;
 
 import java.util.Scanner;
 
+/**
+ * Handles user interaction for the Grace application
+ * Provides methods to display messages, errors, and read user input.
+ */
 public class Ui {
     private final static String PARTITION = "____________________________________________________________";
     private final Scanner sc;
 
+    /**
+     * Creates an Ui instance with a Scanner for reading user input.
+     */
     public Ui() {
         sc = new Scanner(System.in);
     }
@@ -33,6 +40,11 @@ public class Ui {
         showMessage("Bye. Hope to see you again soon.");
     }
 
+    /**
+     * Reads a line from the user input from the console.
+     *
+     * @return the user input as a string.
+     */
     public String readCommand() {
         return sc.nextLine();
     }
